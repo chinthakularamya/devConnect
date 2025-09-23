@@ -9,6 +9,49 @@ app.post("/signup",async(req,res)=>{
     await user.save()
     res.send("user signed up successfully")
 })
+app.get("/user",async(req,res)=>{
+    const userEmail=req.body.email
+    try{
+const user=await User.findOne({email:userEmail})
+res.send(user)
+    }
+    catch(err){
+        console.log("something went wrong",err.message)
+    }
+})
+app.get("/feed",async(req,res)=>{
+    try{
+       const users= await User.find()
+        res.send(users)
+    }
+    catch(err){
+        console.log("something went wrong",err.message)
+        
+    }
+
+})
+app.delete("/user",async(req,res)=>{
+const id=req.body.id
+try{
+    const user=await User.findByIdAndDelete(id)
+    res.send("user deleted successfully")
+}
+catch(err){
+    console.log("something went wrong",err.message)
+}
+})
+app.patch("/user",async(req,res)=>{
+    const id=req.body.id
+    const updatedData=req.body
+    console.log(updatedData)
+    try{
+await User.findByIdAndUpdate(id,updatedData)
+res.send("user updated successfully")
+    }
+    catch(err){
+console.log("something went wrong",err.message)
+    }
+})
 
 connectDB()
 .then(()=>{
